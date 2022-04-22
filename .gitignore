@@ -1,0 +1,14 @@
+.history
+.lh
+.vscode
+dist
+storybook-static
+coverage
+mutation
+node_modules
+storybook-static
+build-storybook.log
+# stryker temp files
+.stryker-tmp
+
+examples
