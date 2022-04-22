@@ -1,6 +1,7 @@
-import { emptyFieldGenerator, CellState, fieldGenerator } from './Field';
+import { emptyFieldGenerator, CellState, fieldGenerator, Cell } from './Field';
 
 const { empty, bomb, hidden } = CellState;
+const cellWithBombFilter = (cell: Cell) => cell === bomb;
 
 describe('Field Generator ', () => {
   describe('empty field test', () => {
@@ -67,24 +68,29 @@ describe('Field Generator ', () => {
 
     it('middle possible field 50% mine ', () => {
       // random position
-      expect(fieldGenerator(2, 0.5)).toStrictEqual([
-        [bomb, bomb],
-        [empty, empty],
-      ]);
-    });
-
-    it('middle possible field 50% mine ', () => {
-      // random position
 
       const field = fieldGenerator(2, 0.5);
       const flatField = field.flat(); // [9, 9, 0, 0] --> 1차원 어레이로
 
-      console.log(flatField);
       const emptyCell = flatField.filter((cell) => cell === empty);
       const bombCell = flatField.filter((cell) => cell === bomb);
 
       expect(emptyCell).toHaveLength(2);
       expect(bombCell).toHaveLength(2);
+    });
+
+    it('real game field size 10 x 10 1 / 4 확률 cell', () => {
+      const size = 10;
+      const mines = 25;
+
+      const probability = mines / (size * size);
+      const field = fieldGenerator(size, probability);
+
+      console.table(field);
+      console.table(field.flat());
+
+      const flatField = field.flat();
+      expect(flatField.filter(cellWithBombFilter)).toHaveLength(25);
     });
   });
 });
